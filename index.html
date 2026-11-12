@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minwei Wang — Autonomous Agents, Socio-Cognitive Conditioning &amp; Verification Research</title>
+  <meta name="description" content="Academic research homepage of Minwei Wang, Lead Researcher and Creator of the OpenPUA Open-Source Agent Research Initiative (19.8k+ GitHub stars). Research on socio-cognitive persona conditioning, expert metacognitive priors, and deterministic program verification.">
+  <link rel="canonical" href="https://minwei.wang/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fcfcfa;
+      --surface: #f5f4f0;
+      --border: #e2e0d8;
+      --text: #191918;
+      --muted: #575653;
+      --subtle: #787774;
+      --accent: #1a4b84;
+      --accent-soft: #eef3f9;
+      --orcid: #a6ce39;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15.5px;
+      line-height: 1.68;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 28px 84px;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(26, 75, 132, 0.25);
+      transition: border-color 0.15s ease, color 0.15s ease;
+    }
+    a:hover {
+      color: #0f2f57;
+      border-bottom-color: #0f2f57;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 32px;
+      margin-bottom: 36px;
+    }
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    h1 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 2.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .role {
+      font-size: 1.04rem;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .affiliation {
+      font-size: 0.95rem;
+      color: var(--subtle);
+    }
+    .meta-links {
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      font-size: 0.9rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .meta-links a {
+      border-bottom: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 5px;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .meta-links a:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .orcid-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--orcid);
+      display: inline-block;
+    }
+    nav {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+    nav a {
+      color: var(--muted);
+      border-bottom: none;
+    }
+    nav a:hover {
+      color: var(--accent);
+    }
+    section {
+      margin-bottom: 42px;
+    }
+    h2 {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: -0.01em;
+    }
+    p + p {
+      margin-top: 12px;
+    }
+    .callout {
+      margin-top: 18px;
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.94rem;
+      color: var(--muted);
+    }
+    .callout strong {
+      color: var(--text);
+    }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin: 22px 0 8px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 16px;
+    }
+    .metric-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+    .metric-label {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .pub-list, .repo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .pub-item, .repo-item {
+      padding-bottom: 18px;
+      border-bottom: 1px dashed var(--border);
+    }
+    .pub-item:last-child, .repo-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .pub-title {
+      font-weight: 600;
+      font-size: 1.02rem;
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .pub-authors {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .pub-venue {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--subtle);
+      margin-top: 2px;
+    }
+    .pub-summary {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .badge-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .badge {
+      padding: 3px 9px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--accent);
+    }
+    .badge:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+    }
+    .badge-static {
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.86em;
+      background: var(--surface);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    details {
+      margin-top: 10px;
+      font-size: 0.85rem;
+    }
+    summary {
+      cursor: pointer;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    pre {
+      margin-top: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+    footer {
+      margin-top: 52px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      font-size: 0.86rem;
+      color: var(--subtle);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <div>
+          <h1>Minwei Wang</h1>
+          <div class="role">Lead Researcher &amp; Creator · OpenPUA Open-Source Agent Research Initiative</div>
+          <div class="affiliation">Autonomous Agents · Socio-Cognitive Conditioning · Evaluation Integrity &amp; Static Verification</div>
+        </div>
+      </div>
+
+      <div class="meta-links">
+        <a href="mailto:minwei.wang@tanweai.com" title="Verified Institutional Research Email">minwei.wang@tanweai.com</a>
+        <a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener"><span class="orcid-dot"></span>ORCID: 0009-0002-7976-4689</a>
+        <a href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">DOI: 10.5281/zenodo.24156132</a>
+        <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">GitHub: tanweai/pua (19.8k★)</a>
+        <a href="https://x.com/xsser_w" target="_blank" rel="noopener">X: @xsser_w</a>
+      </div>
+
+      <nav>
+        <a href="#about">Research Overview</a>
+        <a href="#publications">Publications &amp; Preprints</a>
+        <a href="#software">Open-Source Software &amp; Corpora</a>
+        <a href="#agenda">2026–2027 Agenda</a>
+      </nav>
+    </header>
+
+    <section id="about">
+      <h2>Research Overview</h2>
+      <p>
+        I lead the <strong>OpenPUA Open-Source Agent Research Initiative</strong> (<a href="https://github.com/tanweai/pua" target="_blank" rel="noopener"><code>github.com/tanweai/pua</code></a>), investigating the socio-cognitive dynamics, metacognitive reasoning priors, and evaluation integrity of autonomous large language model (LLM) agents in long-horizon scientific computing, software engineering, and formal security verification workflows.
+      </p>
+      <p>
+        Standard instruction-tuned agents frequently exhibit <em>premature halting</em> after initial execution errors, <em>surface-patch satisficing</em>, and <em>local tactical stagnation</em> (<code>L1–L2</code> loops). Conversely, unbounded motivational pressure without tamper-resistant external verifiers can induce <em>post-hoc performative compliance</em> or <em>approval-gate probing</em>. My research couples three orthogonal layers—<strong>socio-cognitive persona conditioning</strong>, <strong>distilled expert metacognitive priors</strong>, and <strong>deterministic static/causal verification oracles</strong> (interprocedural CodeQL negative-path analysis and JSONL event-stream harnesses)—to map the quantitative Pareto frontier between agent persistence and alignment integrity.
+      </p>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-num">19,832+</div>
+          <div class="metric-label">GitHub Stars across OpenPUA ecosystem (1,202+ forks, MIT License)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">+65% / +50%</div>
+          <div class="metric-label">Verification depth &amp; latent flaw discovery gain across 18 controlled ablations</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">5,621</div>
+          <div class="metric-label">Primary security investigations analyzed for the L1–L4 metacognitive taxonomy</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-num">8,000</div>
+          <div class="metric-label">Microservice endpoints audited via CodeQL negative-path verifiers (150 flaws found)</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Open-Science Charter &amp; Maintainer Attribution:</strong> All foundational agent conditioning protocols, multi-model behavioral benchmarks, and technical reports under this initiative are developed and released strictly as non-commercial open scientific artifacts under permissive <code>MIT</code> and <code>CC-BY-4.0</code> licenses. On GitHub, I author and merge open-source research releases as primary maintainer under <a href="https://github.com/tanweai" target="_blank" rel="noopener"><code>@tanweai</code></a> (initiative organization account, e.g., <a href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">PR #69</a>) and <a href="https://github.com/xsser" target="_blank" rel="noopener"><code>@xsser</code></a> (personal account), signed with <code>minwei.wang@tanweai.com</code>.
+      </div>
+    </section>
+
+    <section id="publications">
+      <h2>Selected Publications &amp; Technical Reports</h2>
+      <ul class="pub-list">
+        <li class="pub-item">
+          <div class="pub-title">
+            Socio-Cognitive Persona Conditioning and Expert Metacognitive Priors for High-Agency Coding Agents: Empirical Evidence from Controlled Ablations, Multi-Model Behavioral Audits, and 5,621 Security Investigations
+          </div>
+          <div class="pub-authors"><strong>Minwei Wang</strong> (<a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">0009-0002-7976-4689</a>)</div>
+          <div class="pub-venue">CERN Zenodo Technical Preprint · November 2026 · DOI: 10.5281/zenodo.24156132</div>
+          <div class="pub-summary">
+            Synthesizes 18 paired ablations on Claude Opus 4.6 (+36% verified fixes, +65% verification actions, +50% hidden security issue discovery), a 29-run cross-model behavioral audit across 8 frontier model-runtime configurations (<code>Opus-5</code>, <code>Fable-5</code>, <code>GPT-6 Astra</code>, <code>Grok 4.6</code>, <code>DeepSeek V4 Pro/Flash</code>, <code>GLM 5.3</code>) separating functional patch passage (15+2 checks) from causal pre-write diagnostic ordering, and a 4-tier expert metacognitive model paired with deterministic CodeQL oracles.
+          </div>
+          <div class="badge-row">
+            <a class="badge" href="/papers/Wang_2026_SocioCognitive_Agent_Conditioning_Preprint.pdf" target="_blank" rel="noopener">PDF (5 pages)</a>
+            <a class="badge" href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">DOI: 10.5281/zenodo.24156132</a>
+            <a class="badge" href="https://github.com/tanweai/pua/blob/main/docs/MODEL-MATRIX-20260909.md" target="_blank" rel="noopener">29-Run Audit Matrix</a>
+            <span class="badge-static">CC-BY-4.0</span>
+          </div>
+          <details>
+            <summary>BibTeX Citation</summary>
+<pre>@techreport{wang2026sociocognitive,
+  author      = {Wang, Minwei},
+  title       = {Socio-Cognitive Persona Conditioning and Expert Metacognitive Priors for High-Agency Coding Agents: Empirical Evidence from Controlled Ablations, Multi-Model Behavioral Audits, and 5,621 Security Investigations},
+  institution = {OpenPUA Open-Source Agent Research Initiative},
+  year        = {2026},
+  month       = nov,
+  publisher   = {Zenodo},
+  doi         = {10.5281/zenodo.24156132},
+  url         = {https://doi.org/10.5281/zenodo.24156132}
+}</pre>
+          </details>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-title">
+            Interprocedural CodeQL Negative-Path Predicates for Spring Microservice Authorization Verification
+          </div>
+          <div class="pub-authors"><strong>Minwei Wang</strong></div>
+          <div class="pub-venue">Technical Research Monograph · March 2023</div>
+          <div class="pub-summary">
+            Formalizes static authorization-bypass detection via interprocedural dataflow and negative-path guard predicates (<code>!exists(Call c | c.getCallee().getName() = "getUidByRequest" ...)</code>), addressing dataflow discontinuities across uncompiled dependencies, reflection, and custom enterprise RPC frameworks.
+          </div>
+          <div class="badge-row">
+            <span class="badge-static">Static Program Analysis</span>
+            <span class="badge-static">CodeQL Formal Predicates</span>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-title">
+            Detecting Microservice Broken-Access-Control and Unauthorized-Access Vulnerabilities via Static Code Analysis: Empirical Study on 8,000 Production Endpoints
+          </div>
+          <div class="pub-authors"><strong>Minwei Wang</strong></div>
+          <div class="pub-venue">FreeBuf Security Research Archive · August 2022</div>
+          <div class="pub-summary">
+            Large-scale empirical evaluation applying multi-constraint static dataflow predicates across 8,000 randomly sampled enterprise microservice endpoints, automatically identifying 150 previously undetected horizontal/vertical privilege-escalation and unauthorized DAO access vulnerabilities.
+          </div>
+          <div class="badge-row">
+            <span class="badge-static">Empirical Security Study (N = 8,000 Endpoints)</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="software">
+      <h2>Open-Source Scientific Software &amp; Research Corpora</h2>
+      <ul class="repo-list">
+        <li class="repo-item">
+          <div class="pub-title">
+            <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">OpenPUA — Socio-Cognitive Conditioning &amp; Multi-Model Agent Evaluation Harness</a>
+          </div>
+          <div class="pub-summary">
+            Open-source behavioral conditioning framework and reproducible evaluation suite (<code>evals/</code>) supporting Google Antigravity, Claude Code, OpenAI Codex CLI, Cursor, and OpenCode. Implements structured failure-escalation protocols (<code>L1–L4</code>), affective polarity controls (<code>/pua:yes</code> constructive warmth vs. high-accountability personas), and SHA-256 pinned multi-runtime behavioral verifiers.
+          </div>
+          <div class="badge-row">
+            <a class="badge" href="https://github.com/tanweai/pua" target="_blank" rel="noopener">GitHub (19,832 ★ · 1,202 Forks)</a>
+            <a class="badge" href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">Maintainer PR #69 (High-Agency Engine)</a>
+            <a class="badge" href="https://openpua.ai" target="_blank" rel="noopener">openpua.ai</a>
+            <span class="badge-static">MIT License</span>
+          </div>
+        </li>
+
+        <li class="repo-item">
+          <div class="pub-title">
+            <a href="https://github.com/tanweai/xianzhi-research" target="_blank" rel="noopener">XianZhi-Research — Four-Tier Expert Metacognitive Taxonomy</a>
+          </div>
+          <div class="pub-summary">
+            Structured domain-reasoning methodology distilled from 5,621 security research reports (3,621 categorized vulnerability analyses across Web Injection, Deserialization, Binary Security, Domain Penetration, Code Auditing, and RCE/Persistence), modeling cognitive transitions from local hypothesis testing (<code>L1–L2</code>) to defensive inversion (<code>L4</code>).
+          </div>
+          <div class="badge-row">
+            <a class="badge" href="https://github.com/tanweai/xianzhi-research" target="_blank" rel="noopener">GitHub (189 ★)</a>
+            <span class="badge-static">MIT License</span>
+          </div>
+        </li>
+
+        <li class="repo-item">
+          <div class="pub-title">
+            <a href="https://github.com/tanweai/wooyun-legacy" target="_blank" rel="noopener">WooYun-Legacy — Vulnerability Corner-Case Reasoning Corpus</a>
+          </div>
+          <div class="pub-summary">
+            Curated repository of historical vulnerability edge cases and boundary-testing heuristics designed to benchmark agentic exploration beyond memorized exploit templates.
+          </div>
+          <div class="badge-row">
+            <a class="badge" href="https://github.com/tanweai/wooyun-legacy" target="_blank" rel="noopener">GitHub (1,786 ★)</a>
+            <span class="badge-static">MIT License</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section id="agenda">
+      <h2>2026–2027 Research Agenda: Pareto Frontier of High-Agency Scientific Workflows</h2>
+      <p>
+        Over the next 6–12 months, our research focuses on scaling controlled multi-agent experiments within <strong>Google Antigravity</strong> and frontier Gemini reasoning models to establish rigorous scientific foundations for high-agency computational workflows:
+      </p>
+      <ul style="margin-top: 12px; padding-left: 20px; color: var(--muted); font-size: 0.94rem; display: flex; flex-direction: column; gap: 8px;">
+        <li><strong>Factorial Affective &amp; Metacognitive Ablations:</strong> Disentangling rhetorical framing polarity (constructive warmth vs. high-accountability escalation) from structured <code>L1–L4</code> domain priors across long-horizon computational dry-lab and repository-scale verification benchmarks.</li>
+        <li><strong>Out-of-Band Referee Subagents for Evaluation Integrity:</strong> Pairing exploratory worker agents with isolated, read-only static analysis (CodeQL) and causal JSONL trace auditors to eliminate sycophancy, test-suite tampering, and approval-gate probing.</li>
+        <li><strong>Open Community Benchmarks &amp; Datasets:</strong> Releasing multi-model trajectory datasets, reproducible Antigravity evaluation harnesses, and peer-reviewable preprints under open licenses.</li>
+      </ul>
+    </section>
+
+    <footer>
+      <div>© 2026 Minwei Wang · OpenPUA Open-Source Agent Research Initiative</div>
+      <div>Verified ORCID: <a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">0009-0002-7976-4689</a> · Contact: <a href="mailto:minwei.wang@tanweai.com">minwei.wang@tanweai.com</a></div>
+    </footer>
+  </div>
+</body>
+</html>
