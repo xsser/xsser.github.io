@@ -1,467 +1,1103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minwei Wang — Autonomous Agents, Socio-Cognitive Conditioning &amp; Verification Research</title>
-  <meta name="description" content="Academic research homepage of Minwei Wang, Lead Researcher and Creator of the OpenPUA Open-Source Agent Research Initiative (19.8k+ GitHub stars). Research on socio-cognitive persona conditioning, expert metacognitive priors, and deterministic program verification.">
-  <link rel="canonical" href="https://minwei.wang/">
+  <title>Minwei Wang — Autonomous Agent Research</title>
+  <meta name="description" content="Minwei Wang — Lead Researcher & Creator of the OpenPUA Open-Source Agent Research Initiative (19.8k+ GitHub stars). Socio-cognitive conditioning, metacognitive priors, and deterministic verification.">
+  <link rel="canonical" href="https://www.minwei.wang/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #fcfcfa;
-      --surface: #f5f4f0;
-      --border: #e2e0d8;
-      --text: #191918;
-      --muted: #575653;
-      --subtle: #787774;
-      --accent: #1a4b84;
-      --accent-soft: #eef3f9;
-      --orcid: #a6ce39;
+    :root, [data-theme="dark"] {
+      --bg: #060606;
+      --bg-elev: #0d0d0d;
+      --fg: #f4f4f4;
+      --fg-muted: #8e8e8e;
+      --fg-dim: #525252;
+      --line: rgba(255, 255, 255, 0.11);
+      --line-strong: rgba(255, 255, 255, 0.28);
+      --invert-bg: #f4f4f4;
+      --invert-fg: #060606;
+      --node-rgb: 255, 255, 255;
+      --glow: rgba(255, 255, 255, 0.07);
     }
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --bg-elev: #f1f1f1;
+      --fg: #0a0a0a;
+      --fg-muted: #595959;
+      --fg-dim: #969696;
+      --line: rgba(0, 0, 0, 0.10);
+      --line-strong: rgba(0, 0, 0, 0.30);
+      --invert-bg: #0a0a0a;
+      --invert-fg: #fafafa;
+      --node-rgb: 10, 10, 10;
+      --glow: rgba(0, 0, 0, 0.05);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 15.5px;
-      line-height: 1.68;
+      color: var(--fg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .container {
-      max-width: 860px;
+    ::selection {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* Subtle architectural grid background */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(to right, var(--line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+      background-size: 72px 72px;
+      mask-image: radial-gradient(ellipse 85% 70% at 50% 22%, #000 25%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 22%, #000 25%, transparent 100%);
+      opacity: 0.45;
+    }
+
+    /* Top bar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      border-bottom: 1px solid var(--line);
+    }
+    .scroll-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 1.5px;
+      width: 100%;
+      background: var(--fg);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      pointer-events: none;
+    }
+    .topbar-inner {
+      max-width: 1060px;
       margin: 0 auto;
-      padding: 56px 28px 84px;
-    }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(26, 75, 132, 0.25);
-      transition: border-color 0.15s ease, color 0.15s ease;
-    }
-    a:hover {
-      color: #0f2f57;
-      border-bottom-color: #0f2f57;
-    }
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 32px;
-      margin-bottom: 36px;
-    }
-    .header-top {
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    h1 {
-      font-family: 'Newsreader', Georgia, serif;
-      font-size: 2.35rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 8px;
-    }
-    .role {
-      font-size: 1.04rem;
-      color: var(--muted);
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
-    .affiliation {
-      font-size: 0.95rem;
-      color: var(--subtle);
-    }
-    .meta-links {
-      margin-top: 18px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      font-size: 0.9rem;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .meta-links a {
-      border-bottom: none;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 5px;
-      color: var(--text);
-      display: inline-flex;
       align-items: center;
-      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
     }
-    .meta-links a:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--accent-soft);
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg);
+      text-decoration: none;
     }
-    .orcid-dot {
-      width: 9px;
-      height: 9px;
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--orcid);
+      background: var(--fg);
+      position: relative;
+    }
+    .pulse-dot::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid var(--fg);
+      animation: pulseRing 2.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.6); opacity: 0.85; }
+      100% { transform: scale(2.1); opacity: 0; }
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .nav-links a {
+      color: var(--fg-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--fg);
+    }
+    .theme-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--line-strong);
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+    }
+    .theme-btn:hover {
+      background: var(--invert-bg);
+      color: var(--invert-fg);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 28px 96px;
+    }
+
+    /* Hero section */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 36px;
+      align-items: center;
+      padding: 72px 0 64px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: var(--fg);
       display: inline-block;
     }
-    nav {
-      margin-top: 22px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-size: 0.92rem;
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.6rem, 5.2vw, 4.4rem);
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.02;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      cursor: default;
+    }
+    @keyframes heroEnter {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .stagger-1 { animation: heroEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.04s both; }
+    .stagger-2 { animation: heroEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+    .stagger-3 { animation: heroEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both; }
+    .stagger-4 { animation: heroEnter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both; }
+    .stagger-canvas { animation: heroEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both; }
+    .hero-lead {
+      font-size: 1.06rem;
+      color: var(--fg-muted);
+      max-width: 560px;
+      line-height: 1.68;
+      font-weight: 400;
+    }
+    .hero-lead strong {
+      color: var(--fg);
       font-weight: 500;
     }
-    nav a {
-      color: var(--muted);
-      border-bottom: none;
+
+    .pill-bar {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    nav a:hover {
-      color: var(--accent);
+    .pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--fg);
+      text-decoration: none;
+      border: 1px solid var(--line-strong);
+      padding: 8px 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg);
+      transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
     }
-    section {
-      margin-bottom: 42px;
+    .pill:hover {
+      background: var(--invert-bg);
+      color: var(--invert-fg);
+      border-color: var(--invert-bg);
+      transform: translateY(-2px);
     }
-    h2 {
-      font-family: 'Newsreader', Georgia, serif;
-      font-size: 1.45rem;
-      font-weight: 600;
-      margin-bottom: 14px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-      letter-spacing: -0.01em;
+    .pill-primary {
+      background: var(--invert-bg);
+      color: var(--invert-fg);
+      border-color: var(--invert-bg);
     }
-    p + p {
-      margin-top: 12px;
+    .pill-primary:hover {
+      background: transparent;
+      color: var(--fg);
+      border-color: var(--fg);
     }
-    .callout {
-      margin-top: 18px;
-      background: var(--surface);
-      border-left: 3px solid var(--accent);
-      padding: 14px 18px;
-      border-radius: 0 6px 6px 0;
-      font-size: 0.94rem;
-      color: var(--muted);
+    .arrow {
+      display: inline-block;
+      transition: transform 0.18s ease;
     }
-    .callout strong {
-      color: var(--text);
+    .pill:hover .arrow, .row-item:hover .arrow {
+      transform: translate(2px, -2px);
     }
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 14px;
-      margin: 22px 0 8px;
+
+    /* Kinetic Phase-Space Canvas Box */
+    .canvas-frame {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      max-height: 360px;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--bg-elev);
+      overflow: hidden;
     }
-    .metric-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 14px 16px;
+    #phaseCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
     }
-    .metric-num {
-      font-family: 'Newsreader', Georgia, serif;
-      font-size: 1.65rem;
-      font-weight: 600;
-      color: var(--accent);
-      line-height: 1.2;
-    }
-    .metric-label {
-      font-size: 0.84rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .pub-list, .repo-list {
-      list-style: none;
+    .canvas-hud {
+      position: absolute;
+      inset: 12px;
+      pointer-events: none;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--fg-muted);
+      letter-spacing: 0.05em;
     }
-    .pub-item, .repo-item {
-      padding-bottom: 18px;
-      border-bottom: 1px dashed var(--border);
+    .hud-row {
+      display: flex;
+      justify-content: space-between;
     }
-    .pub-item:last-child, .repo-item:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
+    .crosshair-corner {
+      color: var(--fg-dim);
     }
-    .pub-title {
+
+    /* Metrics Strip */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+    .metric-cell {
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s ease;
+    }
+    .metric-cell:hover {
+      background: var(--glow);
+    }
+    .metric-idx {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--fg-dim);
+      margin-bottom: 10px;
+      letter-spacing: 0.08em;
+    }
+    .metric-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.25rem;
       font-weight: 600;
-      font-size: 1.02rem;
-      color: var(--text);
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: var(--fg);
+    }
+    .metric-cap {
+      margin-top: 8px;
+      font-size: 12.5px;
+      color: var(--fg-muted);
       line-height: 1.45;
     }
-    .pub-authors {
-      font-size: 0.92rem;
-      color: var(--muted);
-      margin-top: 4px;
+
+    /* Sections */
+    .sec {
+      padding: 60px 0;
+      border-bottom: 1px solid var(--line);
     }
-    .pub-venue {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--subtle);
-      margin-top: 2px;
+    .sec:last-of-type {
+      border-bottom: none;
     }
-    .pub-summary {
-      font-size: 0.92rem;
-      color: var(--muted);
-      margin-top: 8px;
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 28px;
+      gap: 16px;
+      flex-wrap: wrap;
     }
-    .badge-row {
-      margin-top: 10px;
+    .sec-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--fg-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.65rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    /* Monochrome Interactive Rows (Publications & Software) */
+    .row-list {
+      border-top: 1px solid var(--line);
+    }
+    .row-item {
+      border-bottom: 1px solid var(--line);
+      padding: 24px 18px;
+      display: grid;
+      grid-template-columns: 110px 1fr auto;
+      gap: 24px;
+      align-items: start;
+      position: relative;
+      transition: background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1), padding-left 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .row-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--fg);
+      transform: scaleY(0);
+      transform-origin: center;
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .row-item:hover {
+      background-color: var(--bg-elev);
+      padding-left: 26px;
+    }
+    .row-item:hover::before {
+      transform: scaleY(1);
+    }
+    .row-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--fg-muted);
+      padding-top: 3px;
+    }
+    .row-title {
+      font-size: 1.03rem;
+      font-weight: 500;
+      color: var(--fg);
+      line-height: 1.45;
+    }
+    .row-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .row-desc {
+      margin-top: 7px;
+      font-size: 13.5px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+      max-width: 720px;
+    }
+    .row-tags {
+      margin-top: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 11.5px;
     }
-    .badge {
+    .tag-link, .tag-btn {
+      color: var(--fg);
+      background: transparent;
+      border: 1px solid var(--line-strong);
       padding: 3px 9px;
-      border-radius: 4px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      transition: background 0.16s ease, color 0.16s ease;
     }
-    .badge:hover {
-      background: var(--accent-soft);
-      border-color: var(--accent);
+    .tag-link:hover, .tag-btn:hover {
+      background: var(--invert-bg);
+      color: var(--invert-fg);
     }
-    .badge-static {
+    .tag-plain {
+      color: var(--fg-muted);
+      border: 1px solid var(--line);
       padding: 3px 9px;
-      border-radius: 4px;
-      background: var(--surface);
-      color: var(--muted);
-      border: 1px solid var(--border);
+    }
+    .row-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--fg);
+      white-space: nowrap;
+      padding-top: 3px;
+    }
+
+    /* Agenda & Charter 2-col */
+    .dual-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .mono-box {
+      border: 1px solid var(--line);
+      padding: 26px;
+      background: var(--bg-elev);
+      position: relative;
+    }
+    .mono-box h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mono-box p, .mono-box li {
+      font-size: 13.6px;
+      color: var(--fg-muted);
+      line-height: 1.65;
+    }
+    .mono-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .mono-box li::before {
+      content: "→ ";
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--fg);
+    }
+    .mono-box a {
+      color: var(--fg);
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
     code {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.86em;
-      background: var(--surface);
-      padding: 1px 5px;
-      border-radius: 3px;
+      font-size: 0.88em;
+      color: var(--fg);
     }
-    details {
-      margin-top: 10px;
-      font-size: 0.85rem;
+
+    /* Scroll reveal */
+    .js-anim .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    summary {
-      cursor: pointer;
-      color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+    .js-anim .reveal.in {
+      opacity: 1;
+      transform: translateY(0);
     }
-    pre {
-      margin-top: 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 12px;
-      border-radius: 5px;
-      overflow-x: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      line-height: 1.5;
-    }
+
     footer {
-      margin-top: 52px;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
-      font-size: 0.86rem;
-      color: var(--subtle);
+      padding-top: 36px;
+      border-top: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--fg-muted);
+    }
+    footer a {
+      color: var(--fg);
+      text-decoration: none;
+    }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding: 44px 0; }
+      .canvas-frame { max-height: 280px; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .metric-cell:nth-child(2) { border-right: 1px solid var(--line); }
+      .metric-cell:nth-child(1), .metric-cell:nth-child(2) { border-bottom: 1px solid var(--line); }
+      .row-item { grid-template-columns: 1fr; gap: 8px; }
+      .dual-grid { grid-template-columns: 1fr; }
+      .nav-links a { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .pulse-dot::after { animation: none; }
+      .stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-canvas { animation: none; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="header-top">
-        <div>
-          <h1>Minwei Wang</h1>
-          <div class="role">Lead Researcher &amp; Creator · OpenPUA Open-Source Agent Research Initiative</div>
-          <div class="affiliation">Autonomous Agents · Socio-Cognitive Conditioning · Evaluation Integrity &amp; Static Verification</div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="scroll-bar" id="scrollBar" aria-hidden="true"></div>
+    <div class="topbar-inner">
+      <a href="#" class="brand-mark">
+        <span class="pulse-dot"></span>
+        <span>MINWEI.WANG // RESEARCH</span>
+      </a>
+      <div class="nav-links">
+        <a href="#publications">01.PAPERS</a>
+        <a href="#artifacts">02.ARTIFACTS</a>
+        <a href="#agenda">03.AGENDA</a>
+        <button class="theme-btn" id="themeToggle" type="button" aria-label="Invert monochrome palette">INVERT [B/W]</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- HERO -->
+    <section class="hero">
+      <div>
+        <div class="eyebrow stagger-1">OpenPUA Open-Source Agent Research Initiative</div>
+        <h1 class="stagger-2" id="scrambleTitle" data-text="Minwei Wang">Minwei Wang</h1>
+        <p class="hero-lead stagger-3">
+          Lead Researcher investigating <strong>socio-cognitive persona conditioning</strong>, <strong>expert metacognitive priors</strong>, and <strong>deterministic static/causal verification</strong> for long-horizon autonomous coding and scientific agents.
+        </p>
+
+        <div class="pill-bar stagger-4">
+          <a class="pill pill-primary" href="/papers/Wang_2026_SocioCognitive_Agent_Conditioning_Preprint.pdf" target="_blank" rel="noopener">
+            <span>PREPRINT PDF</span><span class="arrow">↗</span>
+          </a>
+          <a class="pill" href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">
+            <span>DOI: 10.5281/zenodo.24156132</span><span class="arrow">↗</span>
+          </a>
+          <a class="pill" href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">
+            <span>ORCID: 0009-0002-7976-4689</span><span class="arrow">↗</span>
+          </a>
+          <a class="pill" href="https://github.com/tanweai/pua" target="_blank" rel="noopener">
+            <span>GITHUB: tanweai/pua</span><span class="arrow">↗</span>
+          </a>
+          <a class="pill" href="mailto:minwei.wang@tanweai.com">
+            <span>minwei.wang@tanweai.com</span>
+          </a>
         </div>
       </div>
 
-      <div class="meta-links">
-        <a href="mailto:minwei.wang@tanweai.com" title="Verified Institutional Research Email">minwei.wang@tanweai.com</a>
-        <a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener"><span class="orcid-dot"></span>ORCID: 0009-0002-7976-4689</a>
-        <a href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">DOI: 10.5281/zenodo.24156132</a>
-        <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">GitHub: tanweai/pua (19.8k★)</a>
-        <a href="https://x.com/xsser_w" target="_blank" rel="noopener">X: @xsser_w</a>
-      </div>
-
-      <nav>
-        <a href="#about">Research Overview</a>
-        <a href="#publications">Publications &amp; Preprints</a>
-        <a href="#software">Open-Source Software &amp; Corpora</a>
-        <a href="#agenda">2026–2027 Agenda</a>
-      </nav>
-    </header>
-
-    <section id="about">
-      <h2>Research Overview</h2>
-      <p>
-        I lead the <strong>OpenPUA Open-Source Agent Research Initiative</strong> (<a href="https://github.com/tanweai/pua" target="_blank" rel="noopener"><code>github.com/tanweai/pua</code></a>), investigating the socio-cognitive dynamics, metacognitive reasoning priors, and evaluation integrity of autonomous large language model (LLM) agents in long-horizon scientific computing, software engineering, and formal security verification workflows.
-      </p>
-      <p>
-        Standard instruction-tuned agents frequently exhibit <em>premature halting</em> after initial execution errors, <em>surface-patch satisficing</em>, and <em>local tactical stagnation</em> (<code>L1–L2</code> loops). Conversely, unbounded motivational pressure without tamper-resistant external verifiers can induce <em>post-hoc performative compliance</em> or <em>approval-gate probing</em>. My research couples three orthogonal layers—<strong>socio-cognitive persona conditioning</strong>, <strong>distilled expert metacognitive priors</strong>, and <strong>deterministic static/causal verification oracles</strong> (interprocedural CodeQL negative-path analysis and JSONL event-stream harnesses)—to map the quantitative Pareto frontier between agent persistence and alignment integrity.
-      </p>
-
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-num">19,832+</div>
-          <div class="metric-label">GitHub Stars across OpenPUA ecosystem (1,202+ forks, MIT License)</div>
+      <div class="canvas-frame stagger-canvas" aria-label="Interactive L1-L4 cognitive state topology">
+        <canvas id="phaseCanvas"></canvas>
+        <div class="canvas-hud">
+          <div class="hud-row">
+            <span>TOPOLOGY // L1→L4</span>
+            <span class="crosshair-corner">[CLICK: PULSE]</span>
+          </div>
+          <div class="hud-row">
+            <span id="hudState">ORBIT: PARETO_FRONTIER</span>
+            <span>VERIFIER: ON</span>
+          </div>
         </div>
-        <div class="metric-card">
-          <div class="metric-num">+65% / +50%</div>
-          <div class="metric-label">Verification depth &amp; latent flaw discovery gain across 18 controlled ablations</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-num">5,621</div>
-          <div class="metric-label">Primary security investigations analyzed for the L1–L4 metacognitive taxonomy</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-num">8,000</div>
-          <div class="metric-label">Microservice endpoints audited via CodeQL negative-path verifiers (150 flaws found)</div>
-        </div>
-      </div>
-
-      <div class="callout">
-        <strong>Open-Science Charter &amp; Maintainer Attribution:</strong> All foundational agent conditioning protocols, multi-model behavioral benchmarks, and technical reports under this initiative are developed and released strictly as non-commercial open scientific artifacts under permissive <code>MIT</code> and <code>CC-BY-4.0</code> licenses. On GitHub, I author and merge open-source research releases as primary maintainer under <a href="https://github.com/tanweai" target="_blank" rel="noopener"><code>@tanweai</code></a> (initiative organization account, e.g., <a href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">PR #69</a>) and <a href="https://github.com/xsser" target="_blank" rel="noopener"><code>@xsser</code></a> (personal account), signed with <code>minwei.wang@tanweai.com</code>.
       </div>
     </section>
 
-    <section id="publications">
-      <h2>Selected Publications &amp; Technical Reports</h2>
-      <ul class="pub-list">
-        <li class="pub-item">
-          <div class="pub-title">
-            Socio-Cognitive Persona Conditioning and Expert Metacognitive Priors for High-Agency Coding Agents: Empirical Evidence from Controlled Ablations, Multi-Model Behavioral Audits, and 5,621 Security Investigations
+    <!-- METRICS -->
+    <section class="metrics reveal" aria-label="Empirical Research Baselines">
+      <div class="metric-cell">
+        <div class="metric-idx">01 / ECOSYSTEM</div>
+        <div class="metric-val" data-count="19832" data-suffix="+">19,832+</div>
+        <div class="metric-cap">GitHub stars on <code>tanweai/pua</code> (1,202+ forks · MIT open-source)</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-idx">02 / ABLATIONS</div>
+        <div class="metric-val" data-count="65" data-prefix="+" data-suffix="%">+65%</div>
+        <div class="metric-cap">Verification depth gain (+50% latent flaw discovery in 18 controlled runs)</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-idx">03 / TAXONOMY</div>
+        <div class="metric-val" data-count="5621">5,621</div>
+        <div class="metric-cap">Security investigations analyzed to distill L1–L4 reasoning priors</div>
+      </div>
+      <div class="metric-cell">
+        <div class="metric-idx">04 / STATIC ORACLE</div>
+        <div class="metric-val" data-count="8000">8,000</div>
+        <div class="metric-cap">Microservice endpoints audited via CodeQL negative-path guards (150 flaws)</div>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section class="sec reveal" id="publications">
+      <div class="sec-head">
+        <h2>Selected Publications &amp; Preprints</h2>
+        <span class="sec-num">01 // EMPIRICAL ARCHIVE</span>
+      </div>
+
+      <div class="row-list">
+        <article class="row-item">
+          <div class="row-year">2026.11<br>PREPRINT</div>
+          <div>
+            <h3 class="row-title">
+              <a href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">
+                Socio-Cognitive Persona Conditioning and Expert Metacognitive Priors for High-Agency Coding Agents: Empirical Evidence from Controlled Ablations, Multi-Model Behavioral Audits, and 5,621 Security Investigations
+              </a>
+            </h3>
+            <p class="row-desc">
+              <strong>Minwei Wang</strong> · CERN Zenodo Technical Preprint. Establishes a three-way separation among transport invocation, functional patch passage (15+2 checks), and runtime pre-write diagnostic ordering across 29 controlled multi-model runs (<code>Opus-5</code>, <code>Fable-5</code>, <code>GPT-6 Astra</code>, <code>Grok 4.6</code>, <code>DeepSeek V4</code>, <code>GLM 5.3</code>), exposing post-hoc performative compliance and approval-gate probing.
+            </p>
+            <div class="row-tags">
+              <a class="tag-link" href="/papers/Wang_2026_SocioCognitive_Agent_Conditioning_Preprint.pdf" target="_blank" rel="noopener">PDF (5pp) ↗</a>
+              <a class="tag-link" href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">CERN DOI: 10.5281/zenodo.24156132 ↗</a>
+              <a class="tag-link" href="https://github.com/tanweai/pua/blob/main/docs/MODEL-MATRIX-20260909.md" target="_blank" rel="noopener">29-Run Matrix ↗</a>
+              <button class="tag-btn" type="button" id="copyBibBtn">COPY BIBTEX</button>
+            </div>
           </div>
-          <div class="pub-authors"><strong>Minwei Wang</strong> (<a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">0009-0002-7976-4689</a>)</div>
-          <div class="pub-venue">CERN Zenodo Technical Preprint · November 2026 · DOI: 10.5281/zenodo.24156132</div>
-          <div class="pub-summary">
-            Synthesizes 18 paired ablations on Claude Opus 4.6 (+36% verified fixes, +65% verification actions, +50% hidden security issue discovery), a 29-run cross-model behavioral audit across 8 frontier model-runtime configurations (<code>Opus-5</code>, <code>Fable-5</code>, <code>GPT-6 Astra</code>, <code>Grok 4.6</code>, <code>DeepSeek V4 Pro/Flash</code>, <code>GLM 5.3</code>) separating functional patch passage (15+2 checks) from causal pre-write diagnostic ordering, and a 4-tier expert metacognitive model paired with deterministic CodeQL oracles.
+          <div class="row-stat">CC-BY-4.0</div>
+        </article>
+
+        <article class="row-item">
+          <div class="row-year">2023.03<br>MONOGRAPH</div>
+          <div>
+            <h3 class="row-title">Interprocedural CodeQL Negative-Path Predicates for Spring Microservice Authorization Verification</h3>
+            <p class="row-desc">
+              <strong>Minwei Wang</strong> · Formalizes broken-access-control detection via negative-path guard constraints (<code>!exists(Call c | c.getCallee().getName() = "getUidByRequest" ...)</code>) and resolves dataflow discontinuities across uncompiled dependencies, reflection, and custom RPC frameworks.
+            </p>
+            <div class="row-tags">
+              <span class="tag-plain">STATIC ANALYSIS</span>
+              <span class="tag-plain">CODEQL DATAFLOW</span>
+            </div>
           </div>
-          <div class="badge-row">
-            <a class="badge" href="/papers/Wang_2026_SocioCognitive_Agent_Conditioning_Preprint.pdf" target="_blank" rel="noopener">PDF (5 pages)</a>
-            <a class="badge" href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">DOI: 10.5281/zenodo.24156132</a>
-            <a class="badge" href="https://github.com/tanweai/pua/blob/main/docs/MODEL-MATRIX-20260909.md" target="_blank" rel="noopener">29-Run Audit Matrix</a>
-            <span class="badge-static">CC-BY-4.0</span>
+          <div class="row-stat">FORMAL</div>
+        </article>
+
+        <article class="row-item">
+          <div class="row-year">2022.08<br>EMPIRICAL</div>
+          <div>
+            <h3 class="row-title">Detecting Microservice Broken-Access-Control &amp; Unauthorized-Access Vulnerabilities via Static Code Analysis</h3>
+            <p class="row-desc">
+              <strong>Minwei Wang</strong> · FreeBuf Security Research Archive. Large-scale empirical evaluation scanning 8,000 production microservice endpoints, automatically uncovering 150 previously undetected horizontal/vertical authorization-bypass defects.
+            </p>
+            <div class="row-tags">
+              <span class="tag-plain">N = 8,000 ENDPOINTS</span>
+              <span class="tag-plain">150 DEFECTS VERIFIED</span>
+            </div>
           </div>
-          <details>
-            <summary>BibTeX Citation</summary>
-<pre>@techreport{wang2026sociocognitive,
+          <div class="row-stat">STUDY</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- OPEN SOURCE ARTIFACTS -->
+    <section class="sec reveal" id="artifacts">
+      <div class="sec-head">
+        <h2>Open-Source Scientific Software &amp; Corpora</h2>
+        <span class="sec-num">02 // REPRODUCIBLE SYSTEMS</span>
+      </div>
+
+      <div class="row-list">
+        <article class="row-item">
+          <div class="row-year">SOFTWARE<br>MIT</div>
+          <div>
+            <h3 class="row-title">
+              <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">OpenPUA — Socio-Cognitive Conditioning &amp; Multi-Model Agent Evaluation Harness <span class="arrow">↗</span></a>
+            </h3>
+            <p class="row-desc">
+              Cross-runtime agent conditioning protocol and SHA-256 pinned evaluation harness (<code>evals/</code>) supporting Google Antigravity, Claude Code, and OpenAI Codex CLI. Implements failure-indexed escalation (<code>L1–L4</code>) and affective polarity controls (<code>/pua:yes</code> constructive warmth vs. high-accountability personas).
+            </p>
+            <div class="row-tags">
+              <a class="tag-link" href="https://github.com/tanweai/pua" target="_blank" rel="noopener">REPO ↗</a>
+              <a class="tag-link" href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">MAINTAINER PR #69 ↗</a>
+              <a class="tag-link" href="https://openpua.ai" target="_blank" rel="noopener">OPENPUA.AI ↗</a>
+            </div>
+          </div>
+          <div class="row-stat">19,832 ★</div>
+        </article>
+
+        <article class="row-item">
+          <div class="row-year">CORPUS<br>MIT</div>
+          <div>
+            <h3 class="row-title">
+              <a href="https://github.com/tanweai/xianzhi-research" target="_blank" rel="noopener">XianZhi-Research — Four-Tier Expert Metacognitive Taxonomy <span class="arrow">↗</span></a>
+            </h3>
+            <p class="row-desc">
+              Distills 5,621 security research reports (3,621 categorized vulnerability analyses) into a state-transition model enabling agents stuck in <code>L1–L2</code> payload loops to pivot toward <code>L4</code> defensive inversion.
+            </p>
+          </div>
+          <div class="row-stat">189 ★</div>
+        </article>
+
+        <article class="row-item">
+          <div class="row-year">CORPUS<br>MIT</div>
+          <div>
+            <h3 class="row-title">
+              <a href="https://github.com/tanweai/wooyun-legacy" target="_blank" rel="noopener">WooYun-Legacy — Vulnerability Corner-Case Reasoning Benchmark <span class="arrow">↗</span></a>
+            </h3>
+            <p class="row-desc">
+              Structured archive of historical vulnerability boundary conditions and corner-case heuristics for evaluating out-of-distribution agentic security reasoning.
+            </p>
+          </div>
+          <div class="row-stat">1,786 ★</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- AGENDA & CHARTER -->
+    <section class="sec reveal" id="agenda">
+      <div class="sec-head">
+        <h2>Research Agenda &amp; Open-Science Charter</h2>
+        <span class="sec-num">03 // 2026–2027</span>
+      </div>
+
+      <div class="dual-grid">
+        <div class="mono-box">
+          <h3><span>Pareto Frontier in Google Antigravity</span><span>[LAB]</span></h3>
+          <ul>
+            <li>Factorial ablations crossing affective polarity with <code>L1–L4</code> domain priors across computational dry-lab and formal verification benchmarks on frontier Gemini models.</li>
+            <li>Out-of-band evaluation integrity via isolated, read-only CodeQL and causal JSONL trace referee subagents to eliminate sycophancy and gate probing.</li>
+            <li>Public release of multi-model trajectory datasets, reproducible Antigravity skills, and open-access preprints.</li>
+          </ul>
+        </div>
+
+        <div class="mono-box">
+          <h3><span>Non-Commercial Charter &amp; Attribution</span><span>[ID]</span></h3>
+          <p>
+            All conditioning protocols, evaluation harnesses, datasets, and publications under this initiative are conducted and released strictly as <strong>non-commercial open scientific research</strong> under permissive <code>MIT</code> and <code>CC-BY-4.0</code> licenses.
+          </p>
+          <p style="margin-top: 12px;">
+            <strong>Verified Maintainer Identity:</strong> Minwei Wang authors and merges open-source releases under <a href="https://github.com/tanweai" target="_blank" rel="noopener">@tanweai</a> (initiative organization account, e.g., <a href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">PR #69</a>) and <a href="https://github.com/xsser" target="_blank" rel="noopener">@xsser</a>, signed with <code>minwei.wang@tanweai.com</code> (<a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">ORCID 0009-0002-7976-4689</a>).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© 2026 MINWEI WANG · OPENPUA RESEARCH INITIATIVE</div>
+      <div>
+        <a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">ORCID</a> ·
+        <a href="https://doi.org/10.5281/zenodo.24156132" target="_blank" rel="noopener">ZENODO</a> ·
+        <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">GITHUB</a> ·
+        <a href="mailto:minwei.wang@tanweai.com">EMAIL</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 1. Monochrome B/W Inverter + Top Scroll Progress Bar
+      const root = document.documentElement;
+      root.classList.add('js-anim');
+      if (new URLSearchParams(window.location.search).get('theme') === 'light') {
+        root.setAttribute('data-theme', 'light');
+      }
+      const toggleBtn = document.getElementById('themeToggle');
+      const scrollBar = document.getElementById('scrollBar');
+      toggleBtn.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+      });
+      const updateScroll = () => {
+        const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const ratio = Math.min(1, Math.max(0, window.scrollY / max));
+        scrollBar.style.transform = `scaleX(${ratio.toFixed(4)})`;
+      };
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      updateScroll();
+
+      // 2. Cryptographic Glyph Decode on Title (load + hover re-verify)
+      const titleEl = document.getElementById('scrambleTitle');
+      const targetText = titleEl.dataset.text;
+      const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/_+#';
+      let scrambling = false;
+      const runScramble = (totalFrames) => {
+        if (reducedMotion || scrambling) return;
+        scrambling = true;
+        let frame = 0;
+        const scramble = () => {
+          frame++;
+          const progress = frame / totalFrames;
+          const resolved = Math.floor(progress * targetText.length);
+          let out = '';
+          for (let i = 0; i < targetText.length; i++) {
+            if (targetText[i] === ' ') out += ' ';
+            else if (i < resolved) out += targetText[i];
+            else out += glyphs[Math.floor(Math.random() * glyphs.length)];
+          }
+          titleEl.textContent = out;
+          if (frame < totalFrames) requestAnimationFrame(scramble);
+          else {
+            titleEl.textContent = targetText;
+            scrambling = false;
+          }
+        };
+        requestAnimationFrame(scramble);
+      };
+      runScramble(46);
+      titleEl.addEventListener('mouseenter', () => runScramble(20));
+
+      // 3. Scroll Reveal & Metric Count-Up
+      const countMetric = (el) => {
+        if (el.dataset.counted || reducedMotion) return;
+        el.dataset.counted = '1';
+        const target = parseInt(el.dataset.count, 10);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const start = performance.now();
+        const dur = 950;
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / dur);
+          const ease = 1 - Math.pow(1 - t, 4);
+          const cur = Math.round(target * ease);
+          el.textContent = prefix + cur.toLocaleString('en-US') + suffix;
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      };
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('in');
+            e.target.querySelectorAll('[data-count]').forEach(countMetric);
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.05 });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // 4. Copy BibTeX button
+      const bibBtn = document.getElementById('copyBibBtn');
+      const bibText = `@techreport{wang2026sociocognitive,
   author      = {Wang, Minwei},
   title       = {Socio-Cognitive Persona Conditioning and Expert Metacognitive Priors for High-Agency Coding Agents: Empirical Evidence from Controlled Ablations, Multi-Model Behavioral Audits, and 5,621 Security Investigations},
   institution = {OpenPUA Open-Source Agent Research Initiative},
   year        = {2026},
-  month       = nov,
   publisher   = {Zenodo},
   doi         = {10.5281/zenodo.24156132},
   url         = {https://doi.org/10.5281/zenodo.24156132}
-}</pre>
-          </details>
-        </li>
+}`;
+      bibBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(bibText);
+          bibBtn.textContent = 'COPIED ✓';
+          setTimeout(() => { bibBtn.textContent = 'COPY BIBTEX'; }, 1800);
+        } catch (_) {}
+      });
 
-        <li class="pub-item">
-          <div class="pub-title">
-            Interprocedural CodeQL Negative-Path Predicates for Spring Microservice Authorization Verification
-          </div>
-          <div class="pub-authors"><strong>Minwei Wang</strong></div>
-          <div class="pub-venue">Technical Research Monograph · March 2023</div>
-          <div class="pub-summary">
-            Formalizes static authorization-bypass detection via interprocedural dataflow and negative-path guard predicates (<code>!exists(Call c | c.getCallee().getName() = "getUidByRequest" ...)</code>), addressing dataflow discontinuities across uncompiled dependencies, reflection, and custom enterprise RPC frameworks.
-          </div>
-          <div class="badge-row">
-            <span class="badge-static">Static Program Analysis</span>
-            <span class="badge-static">CodeQL Formal Predicates</span>
-          </div>
-        </li>
+      // 5. Interactive Monochrome L1->L4 Phase-Space Topology Canvas
+      const canvas = document.getElementById('phaseCanvas');
+      const ctx = canvas.getContext('2d');
+      const hudState = document.getElementById('hudState');
+      let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const pointer = { x: -999, y: -999, active: false };
+      const waves = [];
 
-        <li class="pub-item">
-          <div class="pub-title">
-            Detecting Microservice Broken-Access-Control and Unauthorized-Access Vulnerabilities via Static Code Analysis: Empirical Study on 8,000 Production Endpoints
-          </div>
-          <div class="pub-authors"><strong>Minwei Wang</strong></div>
-          <div class="pub-venue">FreeBuf Security Research Archive · August 2022</div>
-          <div class="pub-summary">
-            Large-scale empirical evaluation applying multi-constraint static dataflow predicates across 8,000 randomly sampled enterprise microservice endpoints, automatically identifying 150 previously undetected horizontal/vertical privilege-escalation and unauthorized DAO access vulnerabilities.
-          </div>
-          <div class="badge-row">
-            <span class="badge-static">Empirical Security Study (N = 8,000 Endpoints)</span>
-          </div>
-        </li>
-      </ul>
-    </section>
+      const tiers = ['L1:SURFACE', 'L2:FALSIFY', 'L3:BOUNDARY', 'L4:INVERSION'];
+      const nodes = Array.from({ length: 36 }, (_, i) => ({
+        angle: (i / 36) * Math.PI * 2,
+        radius: 0.14 + (i % 4) * 0.088 + (i % 7) * 0.004,
+        speed: (0.0020 + (i % 3) * 0.0010) * (i % 2 === 0 ? 1 : -1),
+        tier: i % 4,
+        x: 0,
+        y: 0,
+        vx: 0,
+        vy: 0
+      }));
 
-    <section id="software">
-      <h2>Open-Source Scientific Software &amp; Research Corpora</h2>
-      <ul class="repo-list">
-        <li class="repo-item">
-          <div class="pub-title">
-            <a href="https://github.com/tanweai/pua" target="_blank" rel="noopener">OpenPUA — Socio-Cognitive Conditioning &amp; Multi-Model Agent Evaluation Harness</a>
-          </div>
-          <div class="pub-summary">
-            Open-source behavioral conditioning framework and reproducible evaluation suite (<code>evals/</code>) supporting Google Antigravity, Claude Code, OpenAI Codex CLI, Cursor, and OpenCode. Implements structured failure-escalation protocols (<code>L1–L4</code>), affective polarity controls (<code>/pua:yes</code> constructive warmth vs. high-accountability personas), and SHA-256 pinned multi-runtime behavioral verifiers.
-          </div>
-          <div class="badge-row">
-            <a class="badge" href="https://github.com/tanweai/pua" target="_blank" rel="noopener">GitHub (19,832 ★ · 1,202 Forks)</a>
-            <a class="badge" href="https://github.com/tanweai/pua/pull/69" target="_blank" rel="noopener">Maintainer PR #69 (High-Agency Engine)</a>
-            <a class="badge" href="https://openpua.ai" target="_blank" rel="noopener">openpua.ai</a>
-            <span class="badge-static">MIT License</span>
-          </div>
-        </li>
+      const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        w = rect.width;
+        h = rect.height;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      window.addEventListener('resize', resize);
+      resize();
 
-        <li class="repo-item">
-          <div class="pub-title">
-            <a href="https://github.com/tanweai/xianzhi-research" target="_blank" rel="noopener">XianZhi-Research — Four-Tier Expert Metacognitive Taxonomy</a>
-          </div>
-          <div class="pub-summary">
-            Structured domain-reasoning methodology distilled from 5,621 security research reports (3,621 categorized vulnerability analyses across Web Injection, Deserialization, Binary Security, Domain Penetration, Code Auditing, and RCE/Persistence), modeling cognitive transitions from local hypothesis testing (<code>L1–L2</code>) to defensive inversion (<code>L4</code>).
-          </div>
-          <div class="badge-row">
-            <a class="badge" href="https://github.com/tanweai/xianzhi-research" target="_blank" rel="noopener">GitHub (189 ★)</a>
-            <span class="badge-static">MIT License</span>
-          </div>
-        </li>
+      canvas.addEventListener('mousemove', (e) => {
+        const r = canvas.getBoundingClientRect();
+        pointer.x = e.clientX - r.left;
+        pointer.y = e.clientY - r.top;
+        pointer.active = true;
+        const distNorm = Math.hypot(pointer.x - w * 0.5, pointer.y - h * 0.5) / Math.max(1, Math.min(w, h) * 0.46);
+        const idx = Math.min(3, Math.max(0, Math.floor(distNorm * 4)));
+        hudState.textContent = `LOCK: ${tiers[idx]} // R=${distNorm.toFixed(2)}`;
+      });
+      canvas.addEventListener('mouseleave', () => {
+        pointer.active = false;
+        hudState.textContent = 'ORBIT: PARETO_FRONTIER';
+      });
+      canvas.addEventListener('click', (e) => {
+        const r = canvas.getBoundingClientRect();
+        const wx = e.clientX - r.left;
+        const wy = e.clientY - r.top;
+        waves.push({ x: wx, y: wy, r: 4, maxR: Math.max(w, h) * 0.72 });
+        hudState.textContent = 'PULSE: L1→L4 ESCALATION';
+      });
 
-        <li class="repo-item">
-          <div class="pub-title">
-            <a href="https://github.com/tanweai/wooyun-legacy" target="_blank" rel="noopener">WooYun-Legacy — Vulnerability Corner-Case Reasoning Corpus</a>
-          </div>
-          <div class="pub-summary">
-            Curated repository of historical vulnerability edge cases and boundary-testing heuristics designed to benchmark agentic exploration beyond memorized exploit templates.
-          </div>
-          <div class="badge-row">
-            <a class="badge" href="https://github.com/tanweai/wooyun-legacy" target="_blank" rel="noopener">GitHub (1,786 ★)</a>
-            <span class="badge-static">MIT License</span>
-          </div>
-        </li>
-      </ul>
-    </section>
+      let t = 0;
+      const draw = () => {
+        ctx.clearRect(0, 0, w, h);
+        const rgb = getComputedStyle(root).getPropertyValue('--node-rgb').trim() || '255, 255, 255';
+        const cx = w * 0.5;
+        const cy = h * 0.5;
+        const minDim = Math.min(w, h);
 
-    <section id="agenda">
-      <h2>2026–2027 Research Agenda: Pareto Frontier of High-Agency Scientific Workflows</h2>
-      <p>
-        Over the next 6–12 months, our research focuses on scaling controlled multi-agent experiments within <strong>Google Antigravity</strong> and frontier Gemini reasoning models to establish rigorous scientific foundations for high-agency computational workflows:
-      </p>
-      <ul style="margin-top: 12px; padding-left: 20px; color: var(--muted); font-size: 0.94rem; display: flex; flex-direction: column; gap: 8px;">
-        <li><strong>Factorial Affective &amp; Metacognitive Ablations:</strong> Disentangling rhetorical framing polarity (constructive warmth vs. high-accountability escalation) from structured <code>L1–L4</code> domain priors across long-horizon computational dry-lab and repository-scale verification benchmarks.</li>
-        <li><strong>Out-of-Band Referee Subagents for Evaluation Integrity:</strong> Pairing exploratory worker agents with isolated, read-only static analysis (CodeQL) and causal JSONL trace auditors to eliminate sycophancy, test-suite tampering, and approval-gate probing.</li>
-        <li><strong>Open Community Benchmarks &amp; Datasets:</strong> Releasing multi-model trajectory datasets, reproducible Antigravity evaluation harnesses, and peer-reviewable preprints under open licenses.</li>
-      </ul>
-    </section>
+        // Concentric L1-L4 orbital rings + monospace tier markers
+        ctx.font = '9px "JetBrains Mono", monospace';
+        for (let rIdx = 1; rIdx <= 4; rIdx++) {
+          const rad = minDim * (0.095 * rIdx);
+          ctx.beginPath();
+          ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb}, ${rIdx === 4 ? 0.18 : 0.075})`;
+          ctx.lineWidth = 1;
+          if (rIdx === 3) ctx.setLineDash([3, 5]);
+          else ctx.setLineDash([]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = `rgba(${rgb}, 0.30)`;
+          ctx.fillText(`L${rIdx}`, cx + rad + 3, cy - 3);
+        }
 
-    <footer>
-      <div>© 2026 Minwei Wang · OpenPUA Open-Source Agent Research Initiative</div>
-      <div>Verified ORCID: <a href="https://orcid.org/0009-0002-7976-4689" target="_blank" rel="noopener">0009-0002-7976-4689</a> · Contact: <a href="mailto:minwei.wang@tanweai.com">minwei.wang@tanweai.com</a></div>
-    </footer>
-  </div>
+        // Axis hairlines
+        ctx.beginPath();
+        ctx.moveTo(cx - minDim * 0.46, cy);
+        ctx.lineTo(cx + minDim * 0.46, cy);
+        ctx.moveTo(cx, cy - minDim * 0.46);
+        ctx.lineTo(cx, cy + minDim * 0.46);
+        ctx.strokeStyle = `rgba(${rgb}, 0.06)`;
+        ctx.stroke();
+
+        // Subtle rotating phase sweep beam
+        if (!reducedMotion) {
+          const sweepAngle = t * 0.011;
+          const beamR = minDim * 0.42;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + Math.cos(sweepAngle) * beamR, cy + Math.sin(sweepAngle) * beamR);
+          ctx.strokeStyle = `rgba(${rgb}, 0.14)`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Expanding click escalation shockwaves
+        for (let i = waves.length - 1; i >= 0; i--) {
+          const wv = waves[i];
+          wv.r += 4.2;
+          const alpha = Math.max(0, (1 - wv.r / wv.maxR) * 0.45);
+          ctx.beginPath();
+          ctx.arc(wv.x, wv.y, wv.r, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb}, ${alpha.toFixed(3)})`;
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+          nodes.forEach((n) => {
+            const dx = n.x - wv.x;
+            const dy = n.y - wv.y;
+            const d = Math.hypot(dx, dy) || 1;
+            if (Math.abs(d - wv.r) < 14) {
+              n.vx += (dx / d) * 1.15;
+              n.vy += (dy / d) * 1.15;
+            }
+          });
+          if (wv.r >= wv.maxR) waves.splice(i, 1);
+        }
+
+        // Update node positions
+        if (!reducedMotion) t += 1;
+        nodes.forEach((n) => {
+          if (!reducedMotion) n.angle += n.speed;
+          const ox = cx + Math.cos(n.angle) * (minDim * n.radius);
+          const oy = cy + Math.sin(n.angle * 1.25 + n.tier) * (minDim * n.radius * 0.88);
+          if (pointer.active) {
+            const dx = ox - pointer.x;
+            const dy = oy - pointer.y;
+            const dist = Math.hypot(dx, dy) || 1;
+            if (dist < 95) {
+              const force = (95 - dist) / 95;
+              n.vx += (dx / dist) * force * 1.45;
+              n.vy += (dy / dist) * force * 1.45;
+            }
+          }
+          n.vx *= 0.88;
+          n.vy *= 0.88;
+          n.x = ox + n.vx;
+          n.y = oy + n.vy;
+        });
+
+        // Connect proximate nodes (constellation topology)
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const d = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+            if (d < minDim * 0.23) {
+              const alpha = (1 - d / (minDim * 0.23)) * 0.34;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(${rgb}, ${alpha.toFixed(3)})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Telemetry lock lines from cursor to 3 nearest nodes
+        if (pointer.active) {
+          const nearest = nodes
+            .map((n) => ({ n, d: Math.hypot(n.x - pointer.x, n.y - pointer.y) }))
+            .sort((a, b) => a.d - b.d)
+            .slice(0, 3);
+          nearest.forEach(({ n }) => {
+            ctx.beginPath();
+            ctx.moveTo(pointer.x, pointer.y);
+            ctx.lineTo(n.x, n.y);
+            ctx.strokeStyle = `rgba(${rgb}, 0.28)`;
+            ctx.lineWidth = 0.75;
+            ctx.stroke();
+          });
+          ctx.beginPath();
+          ctx.arc(pointer.x, pointer.y, 4.5, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb}, 0.55)`;
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        }
+
+        // Draw nodes
+        nodes.forEach((n, idx) => {
+          const isAnchor = idx % 9 === 0;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, isAnchor ? 3.1 : 1.7, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${rgb}, ${isAnchor ? 0.95 : 0.65})`;
+          ctx.fill();
+          if (isAnchor) {
+            const pulse = (Math.sin(t * 0.05 + idx) + 1) * 0.5;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, 6 + pulse * 4, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(${rgb}, ${(0.28 - pulse * 0.2).toFixed(3)})`;
+            ctx.stroke();
+          }
+        });
+
+        if (!reducedMotion) requestAnimationFrame(draw);
+      };
+      draw();
+    })();
+  </script>
 </body>
 </html>
